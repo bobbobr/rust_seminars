@@ -1,0 +1,10 @@
+[package]
+name = "rust_seminars"
+version = "0.1.0"
+edition = "2021"
+
+
+[[bin]]
+name = "sem3"
+path = "src/sem3.rs"
+[dependencies]
