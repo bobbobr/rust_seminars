@@ -127,7 +127,7 @@ fn main(){
         //..Default::default()
         geolocation: Coord{
             latitude: 55.762,
-            longtitude: 0.0,
+            longtitude: 42.0,
         },
 
         price_data: ApartmentPrice{price: 149000.0, currency: Currency::USD},
@@ -145,6 +145,12 @@ fn main(){
     }
     let coords = result.expect("Couldn't find the aparment");
     println!("{:?}", coords);
+
+    let x = 5;
+    match x{
+        1..=5 => println!("One 1-5"),
+        _ => println!("Something else")
+    }
     // if let Some(&coords) = try_location(&third_apartment){
     //     println!("The aparment is located at {:?}", coords);
     // } else{
