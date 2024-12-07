@@ -1,27 +1,42 @@
 #![allow(unused)]
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 
 struct Coord{
     latitude: f32,
     longtitude: f32,
 }
 
-//#[derive(Debug)]
-//struct ApartmentPrice(f32); // structure , похоже на картеж 
-struct ApartmentPrice{
-    price: f32,
-    currency: String,
-}
-use std::fmt::Debug;
-impl Debug for ApartmentPrice {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "debug {} {}", self.price, self.currency)
+impl Default for Coord {
+    fn default() -> Self {
+        Self { latitude: 55.762, longtitude: 33.617 }
+ 
     }
 }
 
+#[derive(Debug, Default, Clone)]
+enum Currency{
+    #[default]
+    RUB,
+    USD,
+    GBP,
+    EUR
+}
+#[derive(Debug, Default, Clone)]
+//struct ApartmentPrice(f32); // structure , похоже на картеж 
+struct ApartmentPrice{
+    price: f32,
+    currency: Currency,
+}
+// use std::fmt::Debug;
+// impl Debug for ApartmentPrice {
+//     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+//         write!(f, "debug {} {}", self.price, self.currency)
+//     }
+// }
+
 impl std::fmt::Display for ApartmentPrice{
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "display {} {}", self.price, self.currency)
+        write!(f, "display {} {:?}", self.price, self.currency)
     }
 }
 
@@ -38,7 +53,7 @@ impl ApartmentPrice{
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Default, Clone)]
 struct Apartment {
     room_areas: [u32; 3],
     geolocation: Coord,
@@ -46,6 +61,14 @@ struct Apartment {
 
 }
 
+fn try_location(a: &Apartment) -> Option<&Coord>{
+    let Coord {latitude,longtitude} = a.geolocation;
+    if latitude == 0.0 || longtitude == 0.0 {
+        None
+    } else {
+        Some(&a.geolocation)
+    }
+}
 // impl ApartmentPrice{
 //     fn f(&self) {
 //         println!("{}", self.0)
@@ -66,19 +89,53 @@ impl HighPriceTrait for ApartmentPrice{
     }
 }
 
+fn div(a: f32, b: f32) -> Option<f32> {
+    if b == 0.0 {
+        None
+    } else{
+        Some(a / b);
+    }
+
+}
 fn main(){
     let mut apartment = Apartment {
         room_areas: [15;3],
+
+        //..Default::default()
         geolocation: Coord{
             latitude: 55.762,
-            longtitude: 33.617,
+            longtitude: 0.0,
         },
 
-        price_data: ApartmentPrice{price: 149000.0, currency: String::from("RUB")},
+        price_data: ApartmentPrice{price: 149000.0, currency: Currency::USD},
     };
-    println!("{:?}",apartment);
-    println!("{}",apartment.price_data);
-    
+
+    let result = try_location(&apartment);
+    if result.is_none() {
+        panic!("Couldn't find the aparment");
+    }
+    let coords = result.expect("Couldn't find the aparment");
+    println!("{:?}", coords);
+    // if let Some(&coords) = try_location(&third_apartment){
+    //     println!("The aparment is located at {:?}", coords);
+    // } else{
+    //     panic!("Couldn't find the apartemt")
+    // }
+    // println!("{:?}",apartment);
+    // println!("{}",apartment.price_data);
+
+    // let mut new_apartment = apartment.clone();
+    // println!("{:?}",new_apartment);
+    // //let apartment = Apartment::default();
+
+    // println!("{:?}",apartment);
+    // println!("{:?}",new_apartment.price_data.change_price(1000.0));
+    // let third_apartment = Apartment {
+    //     room_areas: [12,13,14],
+    //     ..new_apartment
+    // };
+
+    // println!("{:?}",third_apartment);
 
     // //apartment.total_price.f();
     // println!("{:?}",apartment.price_data.is_too_high());
