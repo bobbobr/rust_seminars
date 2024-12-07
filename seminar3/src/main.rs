@@ -1,16 +1,30 @@
 #![allow(unused)]
 #[derive(Debug)]
+
 struct Coord{
     latitude: f32,
     longtitude: f32,
 }
 
-#[derive(Debug)]
+//#[derive(Debug)]
 //struct ApartmentPrice(f32); // structure , похоже на картеж 
 struct ApartmentPrice{
     price: f32,
     currency: String,
 }
+use std::fmt::Debug;
+impl Debug for ApartmentPrice {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "debug {} {}", self.price, self.currency)
+    }
+}
+
+impl std::fmt::Display for ApartmentPrice{
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "display {} {}", self.price, self.currency)
+    }
+}
+
 
 impl ApartmentPrice{
     fn is_too_high(&self) -> bool{
@@ -63,15 +77,19 @@ fn main(){
         price_data: ApartmentPrice{price: 149000.0, currency: String::from("RUB")},
     };
     println!("{:?}",apartment);
-    //apartment.total_price.f();
-    println!("{:?}",apartment.price_data.is_too_high());
-    println!("{:?}",ApartmentPrice::smth());
-    println!("{:?}",apartment.price_data.change_price(1000.0));
-    println!("{:?}",apartment.price_data.is_too_high());
+    println!("{}",apartment.price_data);
+    
 
-    println!("{:?}",apartment);
+    // //apartment.total_price.f();
+    // println!("{:?}",apartment.price_data.is_too_high());
+    // println!("{:?}",ApartmentPrice::smth());
+    // println!("{:?}",apartment.price_data.change_price(1000.0));
+    // println!("{:?}",apartment.price_data.is_too_high());
 
-    println!("{:?}", HighPriceTrait::is_too_high(&apartment.price_data)); // or
-    println!("{:?}", <ApartmentPrice as HighPriceTrait>::is_too_high(&apartment.price_data));
+    // println!("{:?}",apartment);
+
+    // println!("{:?}", HighPriceTrait::is_too_high(&apartment.price_data)); // or
+    // println!("{:?}", <ApartmentPrice as HighPriceTrait>::is_too_high(&apartment.price_data));
+    // println!("{:?}", (&apartment.price_data as &dyn HighPriceTrait).is_too_high());
 
 }
