@@ -92,12 +92,35 @@ impl HighPriceTrait for ApartmentPrice{
 fn div(a: f32, b: f32) -> Option<f32> {
     if b == 0.0 {
         None
+    } else {
+        Some(a / b)
+    }
+
+}
+
+fn get_location(a: &Apartment) -> Result<&Coord, &'static str> {
+    let Coord {latitude,longtitude} = a.geolocation;
+    if latitude == 0.0{
+        Err("Latitude must be not zero")
+    } else if longtitude == 0.0{
+        Err("Longitude must be not zero")
     } else{
-        Some(a / b);
+        Ok(&a.geolocation)
     }
 
 }
 fn main(){
+
+    let a = 10.0;
+    let b = 2.0;
+    let c = div(a, b);
+    if c.is_none() {
+        println!("Couldn't divide");
+    } else {
+        println!("{}", c.unwrap());
+    }
+
+
     let mut apartment = Apartment {
         room_areas: [15;3],
 
@@ -109,6 +132,12 @@ fn main(){
 
         price_data: ApartmentPrice{price: 149000.0, currency: Currency::USD},
     };
+
+    let result = get_location(&apartment);
+    match result {
+        Err(msg) => println!("Couldn't get location: {}", msg),
+        Ok(coords) => println!("The aparment is located at {:?}", coords),
+    }
 
     let result = try_location(&apartment);
     if result.is_none() {
