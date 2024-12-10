@@ -18,7 +18,6 @@ struct Apartment {
 
 // type ApartmentPrice = f32; or we can use it as 
 
-
 fn main(){
     let apartment = Apartment {
         room_areas: [15;3],
